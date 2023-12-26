@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 
 import '../app.css';
@@ -8,7 +9,10 @@ import '../app.css';
 function UsersTable() {
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  
+  const [currentAction, setCurrentAction] = useState('none');
+
+  const history = useHistory();
+
   const user = useSelector(state => state.user);
   // Здесь 'state' - это ваш глобальный стейт, и 'user' - это свойство, 
   //которое вы хотите извлечь
@@ -17,13 +21,13 @@ function UsersTable() {
     const response = await axios.get('http://localhost:3001/api/users');
     setUsers(response.data);
   };
-  
+
   useEffect(() => {
     // Загрузка пользователей при монтировании компонента
     fetchUsers();
   }, []);
 
- 
+
   const handleLogout = () => {
     window.location.href = '/login';
   };
@@ -39,6 +43,7 @@ function UsersTable() {
   };
 
   const deleteSelectedUsers = async () => {
+    setCurrentAction('delete');
     for (const userId of selectedUsers) {
       await axios.delete(`http://localhost:3001/api/delete/${userId}`);
     }
@@ -46,6 +51,7 @@ function UsersTable() {
   };
 
   const blockSelectedUsers = async () => {
+    setCurrentAction('block');
     for (const userId of selectedUsers) {
       await axios.put(`http://localhost:3001/api/block/${userId}`);
     }
@@ -85,6 +91,19 @@ function UsersTable() {
       setSelectedUsers([]);
     }
   };
+
+  // Функция для перенаправления на страницу входа
+  const redirectToLogin = () => {
+    history.push('/login');
+  };
+
+
+  // Если текущий пользователь выбран при блокировке/удалении, перенаправляем на страницу входа
+  useEffect(() => {
+    if (currentAction === 'block' || currentAction === 'delete' && selectedUsers.includes(user.id)) {
+      redirectToLogin();
+    }
+  }, [currentAction, selectedUsers, user.id]);
 
   return (
     <div className="container mt-3">

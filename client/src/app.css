@@ -1,0 +1,41 @@
+.custom-checkbox input:checked+label::before {
+    background-color: #007bff;
+    /* Цвет при активации */
+    border-color: #007bff;
+}
+
+.selected-row {
+    background-color: #e6f7ff;
+}
+
+.spaced-buttons button {
+    margin-right: 10px;
+    /* или любое другое значение отступа, которое вы предпочитаете */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-bottom: 50px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-info {
+    font-weight: bold;
+}
+
+.logout-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #c9302c;
+}

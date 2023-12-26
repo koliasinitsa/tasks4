@@ -8,26 +8,23 @@ import '../app.css';
 function UsersTable() {
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [username, setUsername] = useState('');
+  
   const user = useSelector(state => state.user);
   // Здесь 'state' - это ваш глобальный стейт, и 'user' - это свойство, 
   //которое вы хотите извлечь
-  console.log(user);
 
+  const fetchUsers = async () => {
+    const response = await axios.get('http://localhost:3001/api/users');
+    setUsers(response.data);
+  };
+  
   useEffect(() => {
     // Загрузка пользователей при монтировании компонента
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
-    const response = await axios.get('http://localhost:3001/api/users');
-    setUsers(response.data);
-
-  };
-
+ 
   const handleLogout = () => {
-    //localStorage.removeItem('authToken');
-    //setUsername("");
     window.location.href = '/login';
   };
 

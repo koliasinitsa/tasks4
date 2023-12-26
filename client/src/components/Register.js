@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function Register() {
-  const [name,setName] = useState('')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -18,13 +18,16 @@ function Register() {
         name
       });
 
-      // Здесь можно обработать ответ от сервера, например, перенаправить пользователя или показать сообщение об успешной регистрации.
       setName('')
       setEmail('');
       setPassword('');
       setError('Регистрация успешно завершена!');
     } catch (err) {
-      setError(err.response.data.message || 'Что-то пошло не так');
+      if (err.response.data.message === 'Такой email уже зарегистрирован') {
+        setError('Этот email уже был зарегистрирован ранее.');
+      } else {
+        setError(err.response.data.message || 'Что-то пошло не так');
+      }
     }
   }
 
@@ -32,7 +35,7 @@ function Register() {
     <div className="container mt-5">
       <h2 className="text-center mb-4">Register</h2>
       <form onSubmit={handleRegister} className="needs-validation" noValidate>
-      <div className="mb-3">
+        <div className="mb-3">
           <label htmlFor="name" className="form-label">Name:</label>
           <input
             type="name"
